@@ -4,6 +4,7 @@ import 'package:contact_apps_flutter/core/error/failures.dart';
 import 'package:contact_apps_flutter/core/usecases/usecase.dart';
 import 'package:contact_apps_flutter/features/contact_list/domain/entities/contact_list_item_entity.dart';
 import 'package:contact_apps_flutter/features/contact_list/domain/usecases/get_contact_detail.dart';
+import 'package:contact_apps_flutter/features/contact_list/domain/usecases/add_contact_detail.dart';
 import 'package:contact_apps_flutter/features/contact_list/domain/usecases/get_contact_list.dart';
 import 'package:contact_apps_flutter/features/contact_list/presentation/bloc/contact_list_event.dart';
 import 'package:contact_apps_flutter/features/contact_list/presentation/bloc/contact_list_state.dart';
@@ -22,11 +23,15 @@ const String INVALID_INPUT_FAILURE_MESSAGE =
 
 class ContactDetailBloc extends Bloc<ContactDetailEvent, ContactDetailState>{
   final GetContactDetail getContactDetail;
+  final AddContactDetailUseCase addContactDetail;
 
   ContactDetailBloc({
     @required GetContactDetail contactDetail,
+    @required AddContactDetailUseCase addContact,
   }) : assert(contactDetail != null),
-        getContactDetail = contactDetail;
+        assert(addContact != null),
+        getContactDetail = contactDetail,
+        addContactDetail = addContact;
 
   @override
   ContactDetailState get initialState => ContactDetailUninitialized();
@@ -35,9 +40,20 @@ class ContactDetailBloc extends Bloc<ContactDetailEvent, ContactDetailState>{
   Stream<ContactDetailState> mapEventToState(ContactDetailEvent event) async* {
     if(event is FetchContactDetail){
       yield ContactDetailLoading();
-      print('eventID ${event.contactId}');
       final failureOrSuccess = await getContactDetail(Params(contactId: event.contactId));
       yield* _eitherLoadedOrErrorState(failureOrSuccess);
+    }
+
+    if(event is PostContactDetail){
+      yield ContactDetailLoading();
+      final failureOrSuccess = await addContactDetail(ParamsAdd(
+        firstName: event.firstName,
+        lastName: event.lastName,
+        age: event.age,
+        photo: event.photo
+      ));
+      print('failureOrSuccess ${failureOrSuccess}');
+      yield* _eitherLoadedOrErrorStateCrud(failureOrSuccess);
     }
   }
 
@@ -50,7 +66,17 @@ class ContactDetailBloc extends Bloc<ContactDetailEvent, ContactDetailState>{
     );
   }
 
+  Stream<ContactDetailState> _eitherLoadedOrErrorStateCrud(
+      Either<Failure, String> failureOrSuccess,
+      ) async* {
+    yield failureOrSuccess.fold(
+          (failure) => ContactDetailCrudError(message: _mapFailureToMessage(failure)),
+          (message) => ContactDetailCrudLoaded(message: message),
+    );
+  }
+
   String _mapFailureToMessage(Failure failure) {
+    print('error ${failure}');
     switch (failure.runtimeType) {
       case ServerFailure:
         return SERVER_FAILURE_MESSAGE;

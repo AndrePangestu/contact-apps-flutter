@@ -45,6 +45,10 @@ dev_dependencies:
   dio: ^3.0.8
   # image upload
   image_picker: ^0.6.3
+  # root access checker
+  trust_fall: ^1.0.4
+  # url launcher
+  url_launcher: ^5.4.1
 
 
 

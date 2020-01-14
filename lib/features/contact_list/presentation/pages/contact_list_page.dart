@@ -8,11 +8,13 @@ import 'package:contact_apps_flutter/features/contact_list/presentation/pages/co
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trust_fall/trust_fall.dart';
 
 import 'contact_add_page.dart';
 
 class ContactListPage extends StatefulWidget {
   static const String routeName = '/contact-list';
+
 
   @override
   State<StatefulWidget> createState() {
@@ -28,6 +30,18 @@ class _ContactListPageState extends State<ContactListPage> {
     super.initState();
     contactListBloc = BlocProvider.of<ContactListBloc>(context);
     contactListBloc.add(FetchContactList());
+    checkRoot();
+  }
+
+  void checkRoot() async {
+    bool isJailBroken = await TrustFall.isJailBroken;
+    if(isJailBroken){
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text('Device is Root Acces')));
+    } else {
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text('Device is No Root Acces')));
+    }
   }
 
   @override
@@ -81,10 +95,15 @@ class _ContactListPageState extends State<ContactListPage> {
                       Container(
                           padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
                           child: Container(
-                            child: Text(contactListItemEntity.firstName),
+                            child: Text('Name : ${contactListItemEntity.firstName} ${contactListItemEntity.lastName}'),
                           ),
                       ),
-                      Divider(),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
+                        child: Container(
+                          child: Text('Age : ${contactListItemEntity.age}'),
+                        ),
+                      ),
                     ],
                   ),
                 ),

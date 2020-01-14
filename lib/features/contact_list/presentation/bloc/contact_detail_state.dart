@@ -14,6 +14,22 @@ class ContactDetailLoaded extends ContactDetailState{
   });
 }
 
+class ContactDetailCrudLoaded extends ContactDetailState{
+  final String message;
+
+  ContactDetailCrudLoaded({
+    this.message
+  });
+}
+
+class ContactDetailCrudError extends ContactDetailState{
+  final String message;
+
+  ContactDetailCrudError({
+    this.message
+  });
+}
+
 class ContactDetailError extends ContactDetailState{
   final String message;
 

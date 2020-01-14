@@ -23,14 +23,30 @@ class ContactDetailRepositoryImpl implements ContactDetailRepository {
   });
 
   @override
-  Future<Either<Failure, ContactListItemEntity>> getContactDetail(
-      String contactId
-      ) async {
+  Future<Either<Failure, ContactListItemEntity>> getContactDetail(String contactId) async {
     if (await networkInfo.isConnected) {
       try {
         ContactDetailModel result = await remoteDataSource.getContactDetail(contactId);
         ContactListItemEntity listData = result.data.entity;
         return Right(listData);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> addContactDetail(
+      String firstName,
+      String lastName,
+      int age,
+      String photo) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.addContactDetail(firstName, lastName, age, photo);
+        return Right(result.message);
       } on ServerException {
         return Left(ServerFailure());
       }

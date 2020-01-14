@@ -7,6 +7,7 @@ import 'package:contact_apps_flutter/features/contact_list/data/repositories/con
 import 'package:contact_apps_flutter/features/contact_list/data/repositories/contact_list_repository_impl.dart';
 import 'package:contact_apps_flutter/features/contact_list/domain/repositories/contact_detail_repository.dart';
 import 'package:contact_apps_flutter/features/contact_list/domain/repositories/contact_list_repository.dart';
+import 'package:contact_apps_flutter/features/contact_list/domain/usecases/add_contact_detail.dart';
 import 'package:contact_apps_flutter/features/contact_list/domain/usecases/get_contact_detail.dart';
 import 'package:contact_apps_flutter/features/contact_list/domain/usecases/get_contact_list.dart';
 import 'package:contact_apps_flutter/features/contact_list/presentation/bloc/contact_detail_bloc.dart';
@@ -29,13 +30,15 @@ Future<void> init() async {
   );
   sl.registerFactory(
         () => ContactDetailBloc(
-        contactDetail: sl()
+        contactDetail: sl(),
+        addContact: sl()
     ),
   );
 
   // Use cases
   sl.registerLazySingleton(() => GetContactList(sl()));
   sl.registerLazySingleton(() => GetContactDetail(sl()));
+  sl.registerLazySingleton(() => AddContactDetailUseCase(sl()));
 
   // Repository
   sl.registerLazySingleton<ContactListRepository>(

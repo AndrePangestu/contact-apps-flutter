@@ -4,4 +4,10 @@ import 'package:dartz/dartz.dart';
 
 abstract class ContactDetailRepository {
   Future<Either<Failure, ContactListItemEntity>> getContactDetail(String contactId);
+  Future<Either<Failure, String>> addContactDetail(
+    String firstName,
+    String lastName,
+    int age,
+    String photo
+  );
 }

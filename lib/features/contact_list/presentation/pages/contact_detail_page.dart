@@ -5,6 +5,7 @@ import 'package:contact_apps_flutter/features/contact_list/presentation/bloc/con
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactDetailPage extends StatefulWidget{
   static const String routeName = '/contact-detail';
@@ -49,7 +50,9 @@ class _ContactDetailPageState extends State<ContactDetailPage>{
               );
             }
             if(state is ContactDetailLoaded){
-              return renderContactView(state.contactListItemEntity);
+              return Center(
+                child: renderContactView(state.contactListItemEntity),
+              );
             }
             return Container();
           },
@@ -61,30 +64,67 @@ class _ContactDetailPageState extends State<ContactDetailPage>{
   Widget renderContactView(ContactListItemEntity items){
     return Container(
       height: 300.0,
-      child: Card(
-        elevation: 2.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(8.0),
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
-                  child: Container(
-                    child: Text(items.firstName),
-                  ),
+      child: Column(
+        children: <Widget>[
+          Card(
+            elevation: 2.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
+                      child: Container(
+                        child: Image.network(
+                          items.photo
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
+                      child: Container(
+                        child: Text('Name : ${items.firstName} ${items.lastName}'),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
+                      child: Container(
+                        child: Text('Age : ${items.age}'),
+                      ),
+                    ),
+                  ],
                 ),
-                Divider(),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+          Container(
+            child: RaisedButton(
+              child: Text('Get Direction Recommended'),
+              onPressed: () {
+                getDirectionMap();
+              },
+            ),
+          )
+        ],
+      )
     );
+  }
+
+  void getDirectionMap() async{
+
+//    final url = 'https://www.google.com/maps/dir/api=1&';
+    final url = "https://goo.gl/maps/8WusxSjroHLSUXes8";
+
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+    throw 'Could not launch $url';
+    }
   }
 
 }
