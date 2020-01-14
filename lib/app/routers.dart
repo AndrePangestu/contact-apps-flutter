@@ -4,10 +4,10 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
 class Routers {
-  Router router = Router();
+  static Router router = Router();
   static const String INITIAL_ROUTE = MainPage.routeName;
 
-  void setupRouter() {
+  static void setupRouter() {
     router.define(
       MainPage.routeName,
       handler: Handler(
@@ -17,12 +17,15 @@ class Routers {
     router.define(
       '${ContactDetailPage.routeName}/:contactId',
       handler: Handler(
-          handlerFunc: (BuildContext context, Map<String, dynamic> params) => ContactDetailPage()
+          handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
+              ContactDetailPage(
+                contactId: params["contactId"][0],
+              )
       ),
     );
   }
 
-  Route<dynamic> handleOnUnknownRoute(RouteSettings settings) {
+  static Route<dynamic> handleOnUnknownRoute(RouteSettings settings) {
     return MaterialPageRoute(
         builder: (context) {
           return Center(

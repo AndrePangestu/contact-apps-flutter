@@ -1,4 +1,5 @@
 import 'package:contact_apps_flutter/features/app_main/presentation/bloc/bloc.dart';
+import 'package:contact_apps_flutter/features/contact_list/presentation/bloc/contact_detail_bloc.dart';
 import 'package:contact_apps_flutter/features/contact_list/presentation/bloc/contact_list_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +29,9 @@ class _BlocInitializerContainerState extends State<BlocInitializerContainer>{
         ),
         BlocProvider<ContactListBloc>(
           create: (_) => sl<ContactListBloc>(),
+        ),
+        BlocProvider<ContactDetailBloc>(
+          create: (_) => sl<ContactDetailBloc>(),
         )
       ],
       child: widget.child,

@@ -7,10 +7,12 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
 import 'app/injection_container.dart' as di;
 import 'app/app.dart';
+import 'app/routers.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
+  Routers.setupRouter();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   runZoned<Future<void>>(() async {

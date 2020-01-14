@@ -1,4 +1,10 @@
+import 'package:contact_apps_flutter/features/contact_list/domain/entities/contact_list_item_entity.dart';
+import 'package:contact_apps_flutter/features/contact_list/presentation/bloc/contact_detail_bloc.dart';
+import 'package:contact_apps_flutter/features/contact_list/presentation/bloc/contact_detail_event.dart';
+import 'package:contact_apps_flutter/features/contact_list/presentation/bloc/contact_detail_state.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ContactDetailPage extends StatefulWidget{
   static const String routeName = '/contact-detail';
@@ -16,15 +22,69 @@ class ContactDetailPage extends StatefulWidget{
 }
 
 class _ContactDetailPageState extends State<ContactDetailPage>{
+  ContactDetailBloc contactDetailBloc;
 
   @override
   void initState(){
     super.initState();
+    contactDetailBloc = BlocProvider.of<ContactDetailBloc>(context);
+    contactDetailBloc.add(FetchContactDetail(
+      widget.contactId
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Text('DETAIL');
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('ContactDetail'),
+      ),
+      body: Container(
+        child: BlocBuilder<ContactDetailBloc, ContactDetailState>(
+          bloc: contactDetailBloc,
+          builder: (context, state){
+            if(state is ContactDetailLoading){
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if(state is ContactDetailLoaded){
+              return renderContactView(state.contactListItemEntity);
+            }
+            return Container();
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget renderContactView(ContactListItemEntity items){
+    return Container(
+      height: 300.0,
+      child: Card(
+        elevation: 2.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
+                  child: Container(
+                    child: Text(items.firstName),
+                  ),
+                ),
+                Divider(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
 }

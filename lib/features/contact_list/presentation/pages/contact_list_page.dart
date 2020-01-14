@@ -3,6 +3,7 @@ import 'package:contact_apps_flutter/features/contact_list/domain/usecases/get_c
 import 'package:contact_apps_flutter/features/contact_list/presentation/bloc/contact_list_bloc.dart';
 import 'package:contact_apps_flutter/features/contact_list/presentation/bloc/contact_list_event.dart';
 import 'package:contact_apps_flutter/features/contact_list/presentation/bloc/contact_list_state.dart';
+import 'package:contact_apps_flutter/features/contact_list/presentation/pages/contact_detail_page.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,9 +31,15 @@ class _ContactListPageState extends State<ContactListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Center(
+          child: Text('Contact List'),
+        ),
+      ),
       body: Container(
         child: Center(
           child: BlocBuilder<ContactListBloc, ContactListState>(
+            bloc: contactListBloc,
             builder: (context, state){
               if(state is ContactListLoading){
                 return CircularProgressIndicator();
@@ -49,7 +56,6 @@ class _ContactListPageState extends State<ContactListPage> {
   }
 
   Widget renderContactListView(List<ContactListItemEntity> items){
-    print('datalenght ${items.length}');
     return ListView.builder(
         itemCount: items.length,
         itemBuilder: (BuildContext buildContext, int index) {
@@ -89,6 +95,6 @@ class _ContactListPageState extends State<ContactListPage> {
 
   void onTap(String contactId){
     print('contactId $contactId');
-//    Navigator.of(context).pushNamed('');
+    Navigator.of(context).pushNamed('${ContactDetailPage.routeName}/$contactId');
   }
 }

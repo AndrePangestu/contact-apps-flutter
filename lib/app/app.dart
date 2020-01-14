@@ -15,12 +15,12 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  Routers routers;
+//  Routers routers;
 
   @override
   void initState(){
     super.initState();
-    routers.setupRouter();
+//    routers.setupRouter();
   }
 
   @override
@@ -30,8 +30,8 @@ class _AppState extends State<App> {
         title: 'Contact Apps Flutter',
         home: MainPage(),
         initialRoute: Routers.INITIAL_ROUTE,
-        onGenerateRoute: routers.router.generator,
-        onUnknownRoute: routers.handleOnUnknownRoute,
+        onGenerateRoute: Routers.router.generator,
+        onUnknownRoute: Routers.handleOnUnknownRoute,
       ),
     );
 
