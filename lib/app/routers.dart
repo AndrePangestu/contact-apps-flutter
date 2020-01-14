@@ -1,4 +1,5 @@
 import 'package:contact_apps_flutter/features/app_main/presentation/pages/main_page.dart';
+import 'package:contact_apps_flutter/features/contact_list/presentation/pages/contact_add_page.dart';
 import 'package:contact_apps_flutter/features/contact_list/presentation/pages/contact_detail_page.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,12 @@ class Routers {
               ContactDetailPage(
                 contactId: params["contactId"][0],
               )
+      ),
+    );
+    router.define(
+      ContactAddPage.routeName,
+      handler: Handler(
+          handlerFunc: (BuildContext context, Map<String, dynamic> params) => ContactAddPage()
       ),
     );
   }

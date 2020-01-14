@@ -37,7 +37,7 @@ class _ContactDetailPageState extends State<ContactDetailPage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ContactDetail'),
+        title: Text('Contact Detail'),
       ),
       body: Container(
         child: BlocBuilder<ContactDetailBloc, ContactDetailState>(

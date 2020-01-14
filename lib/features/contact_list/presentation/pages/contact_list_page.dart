@@ -9,6 +9,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'contact_add_page.dart';
+
 class ContactListPage extends StatefulWidget {
   static const String routeName = '/contact-list';
 
@@ -52,6 +54,9 @@ class _ContactListPageState extends State<ContactListPage> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => addContact()),
     );
   }
 
@@ -96,5 +101,9 @@ class _ContactListPageState extends State<ContactListPage> {
   void onTap(String contactId){
     print('contactId $contactId');
     Navigator.of(context).pushNamed('${ContactDetailPage.routeName}/$contactId');
+  }
+
+  void addContact(){
+    Navigator.of(context).pushNamed(ContactAddPage.routeName);
   }
 }
