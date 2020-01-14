@@ -28,18 +28,19 @@ class _ContactAddPageState extends State<ContactAddPage> {
   String lastName = '';
   int age = 0;
   String photo = '';
+  String message = '';
 
   @override
   void initState() {
     super.initState();
     contactDetailBloc = BlocProvider.of<ContactDetailBloc>(context);
   }
-
-  @override
-  void dispose(){
-    super.dispose();
-    contactDetailBloc.close();
-  }
+//
+//  @override
+//  void dispose() {
+//    super.dispose();
+//    contactDetailBloc.close();
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,8 +142,15 @@ class _ContactAddPageState extends State<ContactAddPage> {
                   BlocBuilder<ContactDetailBloc, ContactDetailState>(
                     bloc: contactDetailBloc,
                     builder: (context, state) {
+                      if (state is ContactDetailUninitialized) {
+                        return Center(
+                          child: Text(''),
+                        );
+                      }
                       if (state is ContactDetailCrudError) {
-                        messageError('Contact Error');
+                        return Center(
+                          child: Text('Contact Error'),
+                        );
                       }
                       if (state is ContactDetailLoading) {
                         return Center(
@@ -150,7 +158,9 @@ class _ContactAddPageState extends State<ContactAddPage> {
                         );
                       }
                       if (state is ContactDetailCrudLoaded) {
-                        messageError('Contact Saved');
+                        return Center(
+                          child: Text('Contact Saved'),
+                        );
                       }
                       return Container();
                     },
@@ -172,12 +182,13 @@ class _ContactAddPageState extends State<ContactAddPage> {
     print('_image ${_image}');
   }
 
-  void messageError(String message){
+  messageError(String message){
+    _scaffoldKey.currentState.removeCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(
         SnackBar(content: Text(message)));
   }
 
-  void submitData() {
+  submitData() {
     print("$firstName, $lastName, $age, $photo");
     contactDetailBloc.add(
         PostContactDetail(

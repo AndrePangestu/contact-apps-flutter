@@ -75,6 +75,8 @@ class ContactDetailRemoteDataSource implements ContactDetailDataSource {
 
     if (response.statusCode == 201) {
       return ResponseMessageModel.fromJson(response.data);
+    } else if (response.statusCode == 400) {
+      throw ServerException();
     } else {
       throw ServerException();
     }
