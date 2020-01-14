@@ -1,6 +1,6 @@
 # contact_apps_flutter
 
-A new Flutter application for Uang Teman Test
+A new Flutter application
 
 ## Getting Started
 
