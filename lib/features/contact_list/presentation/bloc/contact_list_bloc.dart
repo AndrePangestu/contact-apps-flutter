@@ -18,8 +18,9 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState>{
   final GetContactList getContactList;
 
   ContactListBloc({
-    this.getContactList
-  });
+    @required GetContactList contactList,
+  }) : assert(contactList != null),
+        getContactList = contactList;
 
   @override
   ContactListState get initialState => ContactListUninitialized();
@@ -28,10 +29,9 @@ class ContactListBloc extends Bloc<ContactListEvent, ContactListState>{
   Stream<ContactListState> mapEventToState(ContactListEvent event) async* {
     if(event is FetchContactList){
       yield ContactListLoading();
-//      final failureOrSuccess = await getContactList(NoParams());
-      Either<Failure, List<ContactListItemEntity>> result = await getContactList(NoParams());
-//      print('data ${failureOrSuccess}');
-//      yield* _eitherLoadedOrErrorState(result);
+      final failureOrSuccess = await getContactList(NoParams());
+      print('resultBloc ${failureOrSuccess}');
+      yield* _eitherLoadedOrErrorState(failureOrSuccess);
     }
   }
 

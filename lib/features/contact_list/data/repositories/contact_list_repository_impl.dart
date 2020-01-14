@@ -9,8 +9,6 @@ import 'package:meta/meta.dart';
 import 'package:dartz/dartz.dart';
 import 'package:contact_apps_flutter/core/error/exceptions.dart';
 
-typedef Future<ContactListItemEntity> _ContactListChooser();
-
 class ContactListRepositoryImpl implements ContactListRepository {
   final ContactListDataSource remoteDataSource;
   final NetworkInfo networkInfo;
@@ -25,7 +23,9 @@ class ContactListRepositoryImpl implements ContactListRepository {
     if (await networkInfo.isConnected) {
       try {
         ContactListModel result = await remoteDataSource.getContactList();
+        print('dataFix ${result.data}');
         List<ContactListItemEntity> listData = result.data.map((ContactListItemModel model) => model.entity).toList();
+        print('finalResult ${listData}');
         return Right(listData);
       } on ServerException {
         return Left(ServerFailure());

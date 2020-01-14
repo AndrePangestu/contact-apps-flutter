@@ -31,7 +31,7 @@ class ContactListRemoteDataSource implements ContactListDataSource {
     print('result ${response.data}');
 
     if (response.statusCode == 200) {
-      return ContactListModel.fromJson(json.decode(response.data));
+      return ContactListModel.fromJson(response.data);
     } else {
       throw ServerException();
     }

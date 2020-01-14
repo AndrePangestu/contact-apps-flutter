@@ -15,7 +15,7 @@ class GetContactList implements UseCase<List<ContactListItemEntity>, NoParams>{
   );
 
   @override
-  Future<Either<Failure, List<ContactListItemEntity>>> call(NoParams param) async {
+  Future<Either<Failure, List<ContactListItemEntity>>> call(NoParams params) async {
     return await repository.getContactList();
   }
 }

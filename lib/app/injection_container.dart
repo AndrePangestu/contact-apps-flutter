@@ -14,10 +14,12 @@ final sl = GetIt.instance;
 Future<void> init() async {
   // Bloc
   sl.registerFactory(
-      () => BottomNavigationBloc()
+      () => BottomNavigationBloc(),
   );
   sl.registerFactory(
-      () => ContactListBloc()
+      () => ContactListBloc(
+        contactList: sl()
+      ),
   );
 
   // Use cases
@@ -28,7 +30,7 @@ Future<void> init() async {
       () => ContactListRepositoryImpl(
         remoteDataSource: sl(),
         networkInfo: sl()
-      )
+      ),
   );
 
   // Data sources

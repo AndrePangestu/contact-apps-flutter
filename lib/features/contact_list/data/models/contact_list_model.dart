@@ -10,13 +10,41 @@ class ContactListModel {
 
   ContactListModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
-    if (json['ContactListItemModel'] != null) {
+    if (json['data'] != null) {
       data = new List<ContactListItemModel>();
-      json['ContactListItemModel'].forEach((v) {
+      json['data'].forEach((v) {
         data.add(new ContactListItemModel.fromJson(v));
       });
     }
   }
 
+}
+
+class Data {
+  String id;
+  String firstName;
+  String lastName;
+  int age;
+  String photo;
+
+  Data({this.id, this.firstName, this.lastName, this.age, this.photo});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    age = json['age'];
+    photo = json['photo'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['firstName'] = this.firstName;
+    data['lastName'] = this.lastName;
+    data['age'] = this.age;
+    data['photo'] = this.photo;
+    return data;
+  }
 }
 

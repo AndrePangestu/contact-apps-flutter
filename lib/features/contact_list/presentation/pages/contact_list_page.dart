@@ -1,3 +1,4 @@
+import 'package:contact_apps_flutter/features/contact_list/domain/entities/contact_list_item_entity.dart';
 import 'package:contact_apps_flutter/features/contact_list/domain/usecases/get_contact_list.dart';
 import 'package:contact_apps_flutter/features/contact_list/presentation/bloc/contact_list_bloc.dart';
 import 'package:contact_apps_flutter/features/contact_list/presentation/bloc/contact_list_event.dart';
@@ -37,7 +38,7 @@ class _ContactListPageState extends State<ContactListPage> {
                 return CircularProgressIndicator();
               }
               if(state is ContactListLoaded){
-                return Text('LOADED COY');
+                return renderContactListView(state.contactListItemEntity);
               }
               return Container();
             },
@@ -45,5 +46,48 @@ class _ContactListPageState extends State<ContactListPage> {
         ),
       ),
     );
+  }
+
+  Widget renderContactListView(List<ContactListItemEntity> items){
+    print('datalenght ${items.length}');
+    return ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (BuildContext buildContext, int index) {
+          ContactListItemEntity contactListItemEntity = items[index];
+          Widget contactCardView = Container(
+            child: Card(
+              elevation: 2.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(8.0),
+                onTap: () => this.onTap(contactListItemEntity.id),
+                child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
+                          child: Container(
+                            child: Text(contactListItemEntity.firstName),
+                          ),
+                      ),
+                      Divider(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+
+          return contactCardView;
+        }
+    );
+  }
+
+
+  void onTap(String contactId){
+    print('contactId $contactId');
   }
 }
